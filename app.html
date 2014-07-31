@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="assets/icons.css">
+	<!-- <link rel="stylesheet" href="css/normalize.css"> -->
+	<link rel="stylesheet" href="css/bootstrap.grid.min.css">
+	<link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery-1.11.1.min.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrZ_3T1oZjhW-RCL36Kfkjo8BPa6ckXrc&sensor=true&libraries=places">
+    </script>
+	<script src="js/infobox.js"></script>
+	<script src="js/handlebars-v1.3.0.js"></script>
+	<script src="js/maps.js"></script>
+</head>
+<body>
+	<section class="main-tab" id="main-nav">
+		<div class="tab search-tab">
+			<h3>Where are you?</h3>
+		    <input id="pac-input" class="controls" type="text" placeholder="Search Events Near You">
+		</div>
+		<!-- <div class="tab suggestions-tab">
+			<div class="choose-event">
+				<h3>What kind of event do you wish to attend?</h3>
+				<ul class="event-icons">
+					<li><a href="#"><span class="type-icon icon-flag"></span></a></li>
+					<li><a href="#"><span class="type-icon icon-trophy"></span></a></li>
+					<li><a href="#"><span class="type-icon icon-ball"></span></a></li>
+					<li><a href="#"><span class="type-icon icon-earth"></span></a></li>
+					<li><a href="#"><span class="type-icon icon-music"></span></a></li>
+				</ul>
+			</div>
+		</div> -->
+
+		<div class="tab results-tab">
+			<h3>Nearby events are taking place soon</h3>
+			<div class="event-cards">
+				<!-- <article class="event-card">
+					<h4 class="event-title">FIFA</h4>
+					<span class="availability vacant">50 tickets left</span>
+					<span class="event-date">
+						11 May, 2015 <br>	
+						<span class="time">11:30</span>
+					</span>
+					<address>
+							Baker Street,
+							London <br/>
+					</address>
+				</article>
+				<article class="event-card">
+					<h4 class="event-title">SGX Volleyball</h4>
+					<span class="availability vacant">50 tickets left</span>
+					<span class="event-date">
+						11 May, 2015 <br>	
+						<span class="time">12:00</span>
+					</span>
+					<address>
+							Baker Street,
+							London <br/>
+					</address>
+				</article>
+				<article class="event-card">
+					<h4 class="event-title">
+						The Olympics 
+						</h4>
+					<span class="availability non-vacant">Tickets unavaiable</span>
+					<span class="event-date">
+						11 May, 2015 <br>	
+						<span class="time">17:30</span>
+					</span>
+					<address>
+							Baker Street,
+							London <br/>
+					</address>
+				</article>
+				<article class="event-card">
+					<h4 class="event-title">
+						The Olympics 
+						</h4>
+					<span class="availability non-vacant">Tickets unavaiable</span>
+					<span class="event-date">
+						11 May, 2015 <br>	
+						<span class="time">17:30</span>
+					</span>
+					<address>
+							Baker Street,
+							London <br/>
+					</address>
+				</article> -->
+			</div>
+		</div>
+
+		<div class="flip-container-overlay details-tab">
+			<section class="flipper">
+				<div class="front-flipper">
+					<div class="overlay-tab tab-content">
+						<!-- <span class="close-tab-btn icon-times"></span> -->
+						<!-- content here -->
+
+					</div>
+					
+				</div>
+
+				<div class="back-flipper">
+					<div class="overlay-tab tab-back-details">
+						<!-- <span class="close-tab-btn icon-times"></span>
+						<span class="turn-back icon-back"></span> -->
+						<!-- booking here -->
+						
+					</div>
+				</div>
+				
+			</section>
+		</div>
+
+	</section>
+    <div class="google-maps" id="map-canvas"></div>
+
+    <script type="text/x-handlebars-template" id="event-details-template">
+    	<span class="close-tab-btn icon-times"></span>
+    	<span class="turn-back icon-back"></span>
+    	<div class="info-card">
+	    	<div class="event-heading">
+	    		<h2>{{name}}</h2>
+	    		<p class="your-friends">
+	    			<span class="attending-amount">{{attendingEvent.length}}</span>
+	    			of your friends will be there!
+	    		</p>
+	    	</div>
+	    	<div class="row event-details">
+	    		<div class="col-sm-6">
+	    			<ul class="tabs">
+	    				<li class="tab1"><a class="active" href="">Info</a></h3></li>
+	    				<li class="tab2"><a href="">Reviews</a></li>
+	    			</ul>
+	    			<div class="tab1-content">
+	    				<ul class="location-specs">
+	    					<li class="location-spec"><strong>Field type:</strong> {{specs.locationType}}</li>
+	    					<li class="location-spec">
+	    						<strong>Teams:</strong> 
+	    						{{#each teams}} {{teamName}} {{/each}}
+							</li>
+	    					<li class="location-spec"><strong>When:</strong> {{date}}</li>
+	    				</ul>
+	    			</div>
+	    			<div class="tab2-content">
+	    				<blockquote class="location-review">
+	    					<p class="review-body">{{specs.locationReviews.reviewBody}}</p>
+	    					<footer class="review-author">{{specs.locationReviews.reviewAuthor}}</footer>
+	    				</blockquote>
+
+	    			</div>
+	    		</div>
+	    		<div class="col-sm-6">
+	    			<a href="#" class="card-img img-thumb"><img src="{{specs.imgSrc}}" alt="photo of the location"></a>
+	    		</div>
+	    	</div>
+
+	    	<div class="event-booking row">
+	    		<div class="col-sm-12">
+	    			<h3>Buy tickets</h3>
+	    			
+	    				<p>You can easily reserve seats for the upcoming event here</p>
+	    			<form action="" class="book-form">
+	    				<label for="firstName">Name</label>
+	    				<input type="text" name="first-name" id="firstName"><br/>
+
+	    				<label for="lastName">Last Name</label>
+	    				<input type="text" name="last-name" id="lastName"><br/>
+
+	    				<label for="tickets-quantity">Number of places</label>
+	    				<input type="number" name="tickets-quantity" id="firstName"><br/>
+
+
+	    				<p class="order-button-line">
+	    					<button class="btn btn-order">Place order</button>
+	    				</p>
+	    			</form>
+	    		</div>
+	    	</div>
+    	</div>
+    </script>
+
+	<script type="text/x-handlebars-template" id="visible-event-card">
+		{{#each this}}
+		<article class="event-card">
+			<h4 class="event-title">
+				{{name}}
+			</h4>
+
+			<span class="availability vacant">{{vacancies}} places left</span>
+			
+			<span class="event-date">
+				{{date}}
+				<br>	
+				<span class="event-time">{{time}}</span>
+			</span>
+			
+			<p class="your-friends">
+				<span class="attending-amount">{{attendingEvent.length}}</span>
+				of your friends will be there!
+			</p>
+			
+			<address>
+					{{address}}
+			</address>
+		</article>
+		{{/each}}
+	</script>
+    <script type="text/x-handlebars-template" id="event-card">
+	    <span class="close-tab-btn icon-times"></span>
+		<article class="event-card lone">
+			<h4 class="event-title">
+				{{name}}
+				<span class="book-btn-line"><a href="#" class="btn btn-book">Book Now!</a></span>
+			</h4>
+			<span class="availability vacant">{{vacancies}} places left</span>
+			<span class="event-date">
+				{{date}}
+				<br>	
+				<span class="event-time">{{time}}</span>
+			</span>
+			<p class="your-friends">
+				<span class="attending-amount">{{attendingEvent.length}}</span>
+				of your friends will be there!
+			</p>
+			<address>
+				{{address}}
+			</address>
+		</article>
+	</script>
+	<script type="text/x-handlebars-template" id="infobox-template">
+		<div class="infobox-wrapper">
+		    <div id="infobox">
+		        <article class="event-card card-infbx">
+		        	<h4 class="event-title">
+		        		{{name}}
+		        	</h4>
+		        	<span class="availability vacant">{{vacancies}} places left</span>
+		        	<span class="event-date">
+		        		{{date}}
+		        		<br>	
+		        		<span class="event-time">{{time}}</span>
+		        	</span>
+		        	<p class="your-friends">
+		        		<span class="attending-amount">{{attendingEvent.length}}</span>
+		        		of your friends will be there!
+		        	</p>
+		        	<address>
+		        		{{address}}
+		        	</address>
+		        	<a href="#" class="btn btn-book">Book Now!</a>
+		        </article>
+		    </div>
+		</div>
+	</script>
+</body>
+</html>
